@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>拖拽</title>
+        <style>
+            #box {
+                width: 100px;
+                height: 100px;
+                background: #f40;
+                position: fixed;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="box"></div>
+    </body>
+    <script>
+        let el = document.getElementById("box");
+        let offsetX = 0;
+        let offsetY = 0;
+        el.addEventListener("touchstart", (e) => {                  //开始
+            var e = e || event;
+            let defaultX = e.changedTouches[0].clientX - offsetX;               //获得手指相对于窗口X坐标,并减去上一次的坐标(offsetX)
+            let defaultY = e.changedTouches[0].clientY - offsetY; 
+            let touchmoveFunction = (e) => {                        //移动
+                var e = e || event;
+                let ClX = e.changedTouches[0].clientX;               //获得手指相对于窗口X坐标
+                let ClY = e.changedTouches[0].clientY;
+                // if (x)
+                offsetX = ClX - defaultX;                           //保存这一次的坐标
+                offsetY = ClY - defaultY;
+
+                el.style.left = offsetX + "px";             //给位置
+                // if (y)
+                el.style.top = offsetY + "px";
+            }
+            let touchendFunction = ()=>{                           //定义结束函数
+                el.removeEventListener("touchmove", touchmoveFunction); //结束时分别移除移动和结束事件
+                el.removeEventListener("touchend", touchendFunction);
+            }
+            el.addEventListener("touchmove", touchmoveFunction)     //给元素添加移动事件
+
+            el.addEventListener("touchend", touchendFunction)       //给元素添加结束事件
+        })
+    </script>
+
+</html>
